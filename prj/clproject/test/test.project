@@ -25,6 +25,7 @@
         <IncludePath Value="."/>
         <IncludePath Value="../../../src"/>
         <IncludePath Value="../../../test/cpp_test"/>
+        <IncludePath Value="../../../lib"/>
       </Compiler>
       <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
@@ -54,11 +55,11 @@
         <CustomPostBuild/>
         <CustomPreBuild/>
       </AdditionalRules>
-      <Completion EnableCpp11="no" EnableCpp14="no">
+      <Completion EnableCpp11="yes" EnableCpp14="no">
         <ClangCmpFlagsC/>
         <ClangCmpFlags/>
         <ClangPP/>
-        <SearchPaths/>
+        <SearchPaths>../../../lib</SearchPaths>
       </Completion>
     </Configuration>
     <Configuration Name="Release" CompilerType="clang( clang-802.0.42 )" DebuggerType="LLDB Debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">

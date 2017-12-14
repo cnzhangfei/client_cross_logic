@@ -34,6 +34,7 @@
           <incDir>
             <pElem>../../src</pElem>
             <pElem>../../test/cpp_test</pElem>
+            <pElem>../../lib</pElem>
           </incDir>
         </ccTool>
       </compileType>
