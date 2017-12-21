@@ -2,5 +2,8 @@
     "C_Cpp.intelliSenseEngineFallback": "Enabled",
     "clang.cxxflags": [
         "-std=c++11"
-    ]
+    ],
+    "files.associations": {
+        "*.ipp": "cpp"
+    }
 }

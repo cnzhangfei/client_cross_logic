@@ -17,6 +17,7 @@
 #include "commands.h"
 #include "item_def.h"
 #include "action_details.h"
+#include "http_request.h"
 
 namespace marshal {
 
@@ -30,13 +31,29 @@ namespace marshal {
         constexpr static const char* name() {
             return "";
         }
+
+        template<class T, class D>
+        static void invoke(const T& req, D& ) {
+            std::cout << req << std::endl;
+        }
     };
 
-#define Http_Information(_id,_name) template<int Version>\
+    static const std::string HTTP_HOST = "www.baidu.com";
+    static const std::string HTTP_POST = "POST";
+
+#define Http_Information(_id,_name) static const char _id##_url[] = _name;\
+template<int Version>\
 struct information<_id,http_command,Version>{\
     enum{id = _id,type = http_command};\
     constexpr static const char* name(){return _name;}\
+    template<class T,class D>\
+    static void invoke(const T& req, D& rsp){\
+        http_entity<HTTP_HOST,Version>::invoke<HTTP_POST,_id##_url>(req,rsp);\
+    }\
 };
+
+
+
 
 #define Gui_Information(_id,_name) template<int Version>\
 struct information<_id,gui_command,Version>{\
@@ -50,12 +67,14 @@ struct information<_id,action_command,Version> : public action_details<_id,Versi
     constexpr static const char* name() { return #_id;}\
 };
 
-    
+
 
 #define Action_BEG(_name) 
+
 #define Action_DEF(_id,_viewName,_httpUrl,...) Action_Information(_id,__VA_ARGS__) \
 Gui_Information(_id,_viewName)\
-Http_Information(_id,_httpUrl)
+Http_Information(_id,_httpUrl)\
+
 #define Action_END(_name) 
 
 #include "../action_list.h"

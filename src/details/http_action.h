@@ -16,83 +16,73 @@
 #include "action.h"
 #include "action_details.h"
 #include <sstream>
+#include <vector>
 #include <boost/asio.hpp>
 
 namespace marshal {
 
-class http_excuter {
-public:
-	std::string get_remote_data(const std::string& url,
-			const std::string& data) {
-		stream << "GET " << url << " HTTP/1.0\r\n";
-		stream << "Host: " << host << " \r\n";
-		stream << "Accept: */* \r\n";
-		stream << "Connection: Keep-Alive \r\n";
-		stream << "\r\n";
-	}
+    template <int Version>
+    struct information<http_command, action_command, Version> : public action_details<http_command, Version, -1 > {
 
-public:
-	http_excuter() {
-		reconnet();
-	}
-	~http_excuter() {
-	}
-protected:
-	void reconnet() {
-		if (!stream) {
-			stream.connect("172.17.21.22", 8000);
-			if (!stream) {
-				debug << "connect to remote failed" << std::endl;
-				return;
-			}
-		}
-	}
-protected:
-	boost::asio::ip::tcp::iostream stream;
-};
+        enum {
+            id = http_command, type = action_command
+        };
 
-template<int Version>
-struct information<http_command, action_command, Version> : public action_details<
-		http_command, Version, -1> {
+        static constexpr const char* const name() {
+            return "http_command";
+        }
 
-	enum {
-		id = http_command, type = action_command
-	};
+    };
 
-	static constexpr const char* const name() {
-		return "http_command";
-	}
+    /**
+     * 创建HTTP请求特例化动作
+     */
+    template <class T, int Version>
+    class action<T, Version, http_command> {
+    private:
 
-	static std::string request() {
-		std::stringstream ss;
-		return ss.str();
-	}
-};
+        std::string escape(const std::string& src) {
+            std::stringstream result;
+            std::for_each(src.begin(), src.end(), [&result](const char& c) {
+                switch (c) {
+                    case '"': result << "\\\"";
+                        break;
+                    case '\t': result << "\\t";
+                        break;
+                    case '\n': result << "\\n";
+                        break;
+                    case '\r': result << "\\r";
+                        break;
+                    case '\\': result << "\\\\";
+                        break;
+                    default:
+                    {
+                        result << c;
+                        break;
+                    }
+                }
+            });
+            return result.str();
+        }
+    public:
+        typedef action_imp<T, Version> imp_action;
 
-template<class T, int Version> class action<T, Version, http_command> {
-public:
-	typedef action_imp<T, Version> imp_action;
+        enum {
+            id = http_command
+        };
 
-	enum {
-		id = http_command
-	};
-
-	template<int Source> void on(const place_holder<Source>&) {
-		const char* const url =
-				information<Source, http_command, Version>::name();
-		// const std::string data = information<Source, http_command, Version>::request();
-		http_excuter he;
-
-		debug_msg("will be request http --> %s", url);
-	}
-
-protected:
-	std::unordered_map<std::string, std::string> remote_data;
-
-protected:
-	std::string invoke(const std::string& url, const std::string& data) {
-	}
-};
+        template <int Source> void on(const place_holder<Source>&) {
+            std::stringstream ss;
+            ss << "{";
+            information<Source, action_command, Version>::for_each(
+                    this,
+                    [this, &ss](const std::string& k, const std::string & v) {
+                        ss << "\"" << k << "\":\"" << this->escape(v) << "\",";
+                    });
+            ss << "\"id\":\"" << Source << "\"}";
+            information<Source, http_command, Version>::invoke(ss.str(), this);
+        }
+    };
 }
 
 #endif /* HTTP_ACTION_H */
