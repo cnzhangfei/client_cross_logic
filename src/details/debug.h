@@ -18,7 +18,11 @@
 namespace marshal {
 #define debug_msg(fmt,...)  do{\
     char __buffer__[1024] = {0};\
-    snprintf(__buffer__,sizeof(__buffer__) -1 ,"[%s-%d]:" fmt,__FILE__,__LINE__, ##__VA_ARGS__);\
+    snprintf(__buffer__,sizeof(__buffer__) -1 ,"[%s-%d-%s]:" fmt,\
+    __FILE__,\
+    __LINE__,\
+    __FUNCTION__,\
+    ##__VA_ARGS__);\
     std::cout <<  __buffer__  << std::endl;\
 }while(0)
 

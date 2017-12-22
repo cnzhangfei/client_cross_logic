@@ -16,6 +16,7 @@
 
 #include "information.h"
 #include "commands.h"
+#include "debug.h"
 
 namespace marshal {
 
@@ -50,6 +51,7 @@ namespace marshal {
 
         void valid() {
             imp_action* imp = (imp_action*)this;
+            debug_msg("will be excute http_command = %d",id);
             imp->fire(place_holder<http_command>(), place_holder<id>());
         }
     };

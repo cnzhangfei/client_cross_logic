@@ -34,7 +34,7 @@ namespace marshal {
         public:
 
             void fire() {
-                instance->fire(place_holder<command>(), place_holder<Version>());
+                instance->fire(place_holder<command>(), place_holder<-1>());
             };
 
             agent* extract() {

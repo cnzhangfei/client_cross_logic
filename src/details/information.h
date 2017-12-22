@@ -33,27 +33,30 @@ namespace marshal {
         }
 
         template<class T, class D>
-        static void invoke(const T& req, D& ) {
+        static void invoke(const T& req, D&) {
             std::cout << req << std::endl;
         }
     };
 
     static const std::string HTTP_HOST = "www.baidu.com";
     static const std::string HTTP_POST = "POST";
-
-#define Http_Information(_id,_name) static const char _id##_url[] = _name;\
+    static const std::string login_url = "login";
+#define Http_Information(_id,_name) static const std::string _id##__http_url = _name;\
 template<int Version>\
 struct information<_id,http_command,Version>{\
     enum{id = _id,type = http_command};\
     constexpr static const char* name(){return _name;}\
     template<class T,class D>\
     static void invoke(const T& req, D& rsp){\
-        http_entity<HTTP_HOST,Version>::invoke<HTTP_POST,_id##_url>(req,rsp);\
+        http_entity<HTTP_HOST,Version>::template invoke<HTTP_POST,_id##__http_url,T,D>(req,rsp);\
     }\
 };
 
+    enum em_as {
+        aa = 1
+    };
 
-
+    Http_Information(aa, "aa")
 
 #define Gui_Information(_id,_name) template<int Version>\
 struct information<_id,gui_command,Version>{\
@@ -67,6 +70,13 @@ struct information<_id,action_command,Version> : public action_details<_id,Versi
     constexpr static const char* name() { return #_id;}\
 };
 
+    template<int Version>
+    struct information<-1, action_command, Version> : public action_details<-1, Version, -1 > {
+
+        constexpr static const char* name() {
+            return "unknow command";
+        }
+    };
 
 
 #define Action_BEG(_name) 

@@ -4,6 +4,12 @@
         "-std=c++11"
     ],
     "files.associations": {
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "future": "cpp",
+        "stdexcept": "cpp",
+        "string": "cpp",
+        "__string": "cpp",
+        "ios": "cpp",
+        "system_error": "cpp"
     }
 }

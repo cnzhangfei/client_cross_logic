@@ -36,6 +36,7 @@
             <pElem>../../test/cpp_test</pElem>
             <pElem>../../lib</pElem>
           </incDir>
+          <commandLine>-DBOOST_ERROR_CODE_HEADER_ONLY</commandLine>
         </ccTool>
       </compileType>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
