@@ -7,12 +7,43 @@
 
 namespace marshal {
     typedef boost::asio::ip::tcp::iostream http_iostream;
+    typedef std::unordered_map<std::string, std::string> http_headers;
+    const std::string content_length = "Content-Length";
 
+    /**
+     * 定义HTTP头信息
+     */
     class http_item {
     protected:
-        typedef std::unordered_map<std::string, std::string> http_headers;
         http_headers headers;
+
     public:
+
+        http_item &operator<<(http_iostream &stream) {
+            std::string line;
+            stream >> headers["Procotol"] >> headers["State"] >> headers["Describe"];
+            std::getline(stream, line);
+            for (std::getline(stream, line); !!stream && line != "\r"; std::getline(stream, line)) {
+                debug_msg("get line %s", line.c_str());
+                char key[256] = {0}, val[256] = {0};
+                line += '\n';
+                sscanf(line.c_str(), "%[^:]:%[^\n]", key, val);
+                headers[key] = val;
+            }
+            std::for_each(headers.begin(), headers.end(), [](http_headers::const_reference r) {
+                debug_msg("%s->%s", r.first.c_str(), r.second.c_str());
+            });
+            return *this;
+        };
+    public:
+
+        template<const std::string& name, class T>
+        T& header_cast(T& ret) const {
+            http_headers::const_iterator it = headers.find(name);
+            std::stringstream ss(it->second);
+            ss >> ret;
+            return ret;
+        }
     };
 
     template <const std::string &host, const std::string &method, const std::string &url, int Version>
@@ -56,7 +87,8 @@ namespace marshal {
     template <const std::string &host, const std::string &method, const std::string &url, int Version>
     class http_response : public http_item {
     protected:
-        boost::asio::mutable_buffer contents;
+        std::vector<char> contents;
+
     public:
 
         /**
@@ -65,14 +97,16 @@ namespace marshal {
          * @return 
          */
         http_response &operator<<(http_iostream &stream) {
-            std::string line;
-            debug_msg("wait response message for %s %s/%s", method.c_str(), host.c_str(), url.c_str());
-            std::getline
-            for (; !!stream && std::getline(stream, line) && line != "\r";) {
-                debug_msg("response = %s", line.c_str());
-            }
-            stream.write(contents.data_, contents.size_);
-            std::cout << stream.rdbuf();
+            *(http_item *)this << stream;
+            int size = 0;
+            contents.resize(header_cast<content_length>(size));
+            stream.read(contents.data(), size);
+            debug_msg("wait response message for %s %s/%s = %s",
+                    method.c_str(),
+                    host.c_str(),
+                    url.c_str(),
+                    (const char*) contents.data()
+                    );
             return *this;
         }
 
