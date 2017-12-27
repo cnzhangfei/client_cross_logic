@@ -16,6 +16,8 @@
 #include <iostream>
 #include <string.h>
 namespace marshal {
+
+#ifndef debug_msg
 #define debug_msg(fmt,...)  do{\
     char __buffer__[1024] = {0};\
     snprintf(__buffer__,sizeof(__buffer__) -1 ,"[%s-%d-%s]:" fmt,\
@@ -25,9 +27,16 @@ namespace marshal {
     ##__VA_ARGS__);\
     std::cout <<  __buffer__  << std::endl;\
 }while(0)
+#endif
 
+#ifndef error_msg
 #define error_msg debug_msg
+#endif
+
+#ifndef hint_msg
 #define hint_msg  debug_msg
+#endif
+
 }
 
 #endif /* DEBUG_H */

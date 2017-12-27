@@ -13,11 +13,12 @@
 
 #ifndef HTTP_ACTION_H
 #define HTTP_ACTION_H
-#include "action.h"
-#include "action_details.h"
+
 #include <sstream>
 #include <vector>
-#include <boost/asio.hpp>
+#include "action_details.h"
+#include "http_request.h"
+#include "action.h"
 #include "debug.h"
 
 namespace marshal {

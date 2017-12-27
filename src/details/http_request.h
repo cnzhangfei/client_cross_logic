@@ -40,6 +40,9 @@ namespace marshal {
         template<const std::string& name, class T>
         T& header_cast(T& ret) const {
             http_headers::const_iterator it = headers.find(name);
+            if(it == headers.end()){
+                return ret;
+            }
             std::stringstream ss(it->second);
             ss >> ret;
             return ret;
@@ -97,6 +100,12 @@ namespace marshal {
          * @return 
          */
         http_response &operator<<(http_iostream &stream) {
+            if (!stream || !!stream.error()) {
+                error_msg("response stream exception %s on %s",
+                        stream.error().message().c_str(),
+                        host.c_str());
+                return *this;
+            }
             *(http_item *)this << stream;
             int size = 0;
             contents.resize(header_cast<content_length>(size));
@@ -122,10 +131,11 @@ namespace marshal {
 
         static http_iostream &connect() {
             static http_iostream stream(host, "http");
-            if (!stream || !!stream.error()) {
-                error_msg("stream stated failed or closed(%s),reconnected %s",
+            for (int i = 0; i < 3 && (!stream || !!stream.error()); ++i) {
+                error_msg("stream stated failed or closed(%s),reconnected %s,%d",
                         stream.error().message().c_str(),
-                        host.c_str());
+                        host.c_str(),
+                        i);
                 stream.close();
                 stream.connect(host, "http");
             }
