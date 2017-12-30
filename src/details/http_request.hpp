@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <boost/asio.hpp>
-#include "debug.h"
+#include "debug.hpp"
 
 namespace marshal {
     typedef boost::asio::ip::tcp::iostream http_iostream;

@@ -14,9 +14,9 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-#include "information.h"
-#include "commands.h"
-#include "debug.h"
+#include "information.hpp"
+#include "commands.hpp"
+#include "debug.hpp"
 
 namespace marshal {
 

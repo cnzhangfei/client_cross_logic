@@ -13,13 +13,13 @@
 
 #ifndef CLIENT_H
 #define CLIENT_H
-#include "commands.h"
-#include "data_store.h"
-#include "action.h"
-#include "agent.h"
-#include "concrete.h"
-#include "http_action.h"
-#include "gui_action.h"
+#include "commands.hpp"
+#include "data_store.hpp"
+#include "action.hpp"
+#include "agent.hpp"
+#include "concrete.hpp"
+#include "http_action.hpp"
+#include "gui_action.hpp"
 
 namespace marshal {
 
@@ -53,7 +53,7 @@ namespace marshal {
     class w_client<Version> :
     public data_store<w_client<Version>, Version>,
     public action_imp<w_client<Version>, Version>,
-#include "../action_list.h"
+#include "../action_list.hpp"
     public action<w_client<Version>, Version, http_command>,
     public action<w_client<Version>, Version, gui_command> {
     };

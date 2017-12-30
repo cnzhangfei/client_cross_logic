@@ -15,8 +15,8 @@
 #define CONCRETE_H
 #include <sstream>
 
-#include "action_details.h"
-#include "information.h"
+#include "action_details.hpp"
+#include "information.hpp"
 namespace marshal {
 static const std::string no_value("");
 

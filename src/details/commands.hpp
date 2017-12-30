@@ -23,7 +23,7 @@ namespace marshal {
     http_command,
 #define Action_DEF(_name,...) _name,
 #define Action_END(_name) __actions_end};
-#include "../action_list.h"
+#include "../action_list.hpp"
 
 }
 

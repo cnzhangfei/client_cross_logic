@@ -10,7 +10,7 @@
     __android_log_print(ANDROID_LOG_DEBUG,"JNI_BASE","[%s:%d:%s]%s",__FILE__,__LINE__,__FUNCTION__,buffer);\
 }while(0)
 
-#include "special_client.h"
+#include "special_client.hpp"
 
 
 

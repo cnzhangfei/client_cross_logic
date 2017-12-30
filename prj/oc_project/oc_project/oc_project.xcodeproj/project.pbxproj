@@ -15,6 +15,7 @@
 		1082DB5C1FF3669A0092DA04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1082DB5B1FF3669A0092DA04 /* Assets.xcassets */; };
 		1082DB5F1FF3669A0092DA04 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1082DB5D1FF3669A0092DA04 /* LaunchScreen.storyboard */; };
 		1082DB621FF3669A0092DA04 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1082DB611FF3669A0092DA04 /* main.m */; };
+		1082DB6B1FF36BC60092DA04 /* client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1082DB691FF36BC60092DA04 /* client.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,8 @@
 		1082DB5E1FF3669A0092DA04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1082DB601FF3669A0092DA04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1082DB611FF3669A0092DA04 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1082DB691FF36BC60092DA04 /* client.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = client.cpp; sourceTree = "<group>"; };
+		1082DB6A1FF36BC60092DA04 /* client.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = client.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +51,7 @@
 		1082DB401FF3669A0092DA04 = {
 			isa = PBXGroup;
 			children = (
+				1082DB681FF367AC0092DA04 /* base_lib */,
 				1082DB4B1FF3669A0092DA04 /* oc_project */,
 				1082DB4A1FF3669A0092DA04 /* Products */,
 			);
@@ -79,6 +83,15 @@
 				1082DB611FF3669A0092DA04 /* main.m */,
 			);
 			path = oc_project;
+			sourceTree = "<group>";
+		};
+		1082DB681FF367AC0092DA04 /* base_lib */ = {
+			isa = PBXGroup;
+			children = (
+				1082DB691FF36BC60092DA04 /* client.cpp */,
+				1082DB6A1FF36BC60092DA04 /* client.hpp */,
+			);
+			path = base_lib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,6 +167,7 @@
 			files = (
 				1082DB621FF3669A0092DA04 /* main.m in Sources */,
 				1082DB511FF3669A0092DA04 /* RootViewController.m in Sources */,
+				1082DB6B1FF36BC60092DA04 /* client.cpp in Sources */,
 				1082DB571FF3669A0092DA04 /* ModelController.m in Sources */,
 				1082DB541FF3669A0092DA04 /* DataViewController.m in Sources */,
 				1082DB4E1FF3669A0092DA04 /* AppDelegate.m in Sources */,
@@ -289,26 +303,41 @@
 		1082DB661FF3669A0092DA04 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CODE_SIGN_STYLE = Automatic;
+				GCC_INPUT_FILETYPE = automatic;
+				HEADER_SEARCH_PATHS = "";
+				"HEADER_SEARCH_PATHS[arch=*]" = "";
 				INFOPLIST_FILE = oc_project/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.feizhang.oc-project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../../../src ${PROJECT_DIR}/../../../lib";
 			};
 			name = Debug;
 		};
 		1082DB671FF3669A0092DA04 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CODE_SIGN_STYLE = Automatic;
+				GCC_INPUT_FILETYPE = automatic;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = oc_project/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.feizhang.oc-project";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "${PROJECT_DIR}/../../../src ${PROJECT_DIR}/../../../lib";
 			};
 			name = Release;
 		};

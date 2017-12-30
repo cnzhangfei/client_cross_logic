@@ -26,7 +26,7 @@ namespace marshal {
 #define Action_Item_DEF(_name,...) em_##_name,
 #define Action_Item_END(_name) }; \
     }
-#include "../item_list.h"
+#include "../item_list.hpp"
 
 
 
@@ -58,7 +58,7 @@ namespace marshal {
         }\
     };
 #define Action_Item_END(_name) 
-#include "../item_list.h"
+#include "../item_list.hpp"
 }
 
 

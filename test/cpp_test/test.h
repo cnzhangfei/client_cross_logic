@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
-#include "special_client.h"
+#include "special_client.hpp"
 
 enum {
     test_version = 0,

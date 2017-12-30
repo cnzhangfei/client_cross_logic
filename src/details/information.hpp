@@ -14,10 +14,10 @@
 #ifndef INFORMATION_H
 #define INFORMATION_H
 
-#include "commands.h"
-#include "item_def.h"
-#include "action_details.h"
-#include "http_request.h"
+#include "commands.hpp"
+#include "item_def.hpp"
+#include "action_details.hpp"
+#include "http_request.hpp"
 
 namespace marshal {
 
@@ -87,7 +87,7 @@ Http_Information(_id,_httpUrl)\
 
 #define Action_END(_name) 
 
-#include "../action_list.h"
+#include "../action_list.hpp"
 }
 
 

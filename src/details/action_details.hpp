@@ -14,7 +14,7 @@
 #ifndef CHECK_INFORMATIONS_H
 #define CHECK_INFORMATIONS_H
 #include <functional>
-#include "debug.h"
+#include "debug.hpp"
 
 namespace marshal {
 

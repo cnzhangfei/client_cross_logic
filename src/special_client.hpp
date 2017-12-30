@@ -13,8 +13,8 @@
 
 #ifndef SPECIAL_CLIENT_H
 #define SPECIAL_CLIENT_H
-#include "details/commands.h"
-#include "details/client.h"
+#include "details/commands.hpp"
+#include "details/client.hpp"
 
 namespace marshal {
 

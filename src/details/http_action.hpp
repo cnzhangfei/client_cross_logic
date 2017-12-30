@@ -16,10 +16,10 @@
 
 #include <sstream>
 #include <vector>
-#include "action_details.h"
-#include "http_request.h"
-#include "action.h"
-#include "debug.h"
+#include "action_details.hpp"
+#include "http_request.hpp"
+#include "action.hpp"
+#include "debug.hpp"
 
 namespace marshal {
 

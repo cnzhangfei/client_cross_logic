@@ -14,7 +14,7 @@
 #ifndef GUI_ACTION_H
 #define GUI_ACTION_H
 
-#include "action.h"
+#include "action.hpp"
 
 namespace marshal {
 
