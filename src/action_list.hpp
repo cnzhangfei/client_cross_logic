@@ -14,8 +14,8 @@
 
 
 Action_BEG(actions)
-Action_DEF(login_command, "loginView","Login",item_id::em_name, item_id::em_pass, item_id::em_capt)
-Action_DEF(wellcome_command,"wellView","initSession",-1)
+Action_DEF(login_command, "loginView","/Login",item_id::em_name, item_id::em_pass, item_id::em_capt)
+Action_DEF(wellcome_command,"wellView","/initSession",-1)
 Action_END(actions)
 
 

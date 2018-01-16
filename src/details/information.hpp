@@ -38,9 +38,9 @@ namespace marshal {
         }
     };
 
-    static const std::string HTTP_HOST = "www.baidu.com";
+    static const std::string HTTP_HOST = "127.0.0.1";
     static const std::string HTTP_POST = "POST";
-    static const std::string login_url = "login";
+    static const std::string login_url = "/login";
 #define Http_Information(_id,_name) static const std::string _id##__http_url = _name;\
 template<int Version>\
 struct information<_id,http_command,Version>{\

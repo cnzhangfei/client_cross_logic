@@ -1,3 +1,5 @@
 /prj/nbproject/dist/
 /prj/nbproject/build/
 /lib/*
+/svr/NODEJS/.vscode
+/svr/NODEJS/node_modules

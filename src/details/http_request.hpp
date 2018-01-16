@@ -20,6 +20,10 @@ namespace marshal {
     public:
 
         http_item &operator<<(http_iostream &stream) {
+            if(!stream){
+                debug_msg("stream failed");
+                return *this;
+            }
             std::string line;
             stream >> headers["Procotol"] >> headers["State"] >> headers["Describe"];
             std::getline(stream, line);
@@ -61,6 +65,7 @@ namespace marshal {
             headers["Host"] = host;
             headers["Accept"] = "*/*";
             headers["Connection"] = "Keep-Alive";
+            headers["Content-Type"] = "application/json; charset=utf-8";
         }
 
     public:
@@ -72,17 +77,13 @@ namespace marshal {
          * @return 
          */
         http_request &operator>>(http_iostream &stream) {
-            std::stringstream ss;
-            ss << method << " " << url << " HTTP/1.1\r\n";
-            std::for_each(headers.begin(), headers.end(), [&ss](http_headers::const_reference r) {
-                ss << r.first << ": " << r.second << "\r\n";
+            stream << method << " " << url << " HTTP/1.1\r\n";
+            std::for_each(headers.begin(), headers.end(), [&stream](http_headers::const_reference r) {
+                stream << r.first << ": " << r.second << "\r\n";
             });
-            ss << "Content-Length:" << boost::asio::buffer_size(contents) << "\r\n";
-            ss << "\r\n";
-            debug_msg("%s %s [%s]", method.c_str(), url.c_str(), (const char *) contents.data());
-
-            stream << ss.str();
-            stream.write((const char *) contents.data(), contents.size());
+            stream << "Content-Length:" << strlen((const char*)contents.data()) << "\r\n";
+            stream << "\r\n";
+            stream << (const char*)contents.data();
             return *this;
         }
     };
@@ -108,9 +109,11 @@ namespace marshal {
             }
             *(http_item *)this << stream;
             int size = 0;
-            contents.resize(header_cast<content_length>(size));
+            contents.resize(header_cast<content_length>(size) + 1,'\0');
+            //std::stringstream ss;
+           // stream.get()
             stream.read(contents.data(), size);
-            debug_msg("wait response message for %s %s/%s = %s",
+            debug_msg("wait response message for %s %s%s = %s",
                     method.c_str(),
                     host.c_str(),
                     url.c_str(),
@@ -130,7 +133,7 @@ namespace marshal {
     private:
 
         static http_iostream &connect() {
-            static http_iostream stream(host, "http");
+            static http_iostream stream(host,"3000");
             for (int i = 0; i < 3 && (!stream || !!stream.error()); ++i) {
                 error_msg("stream stated failed or closed(%s),reconnected %s,%d",
                         stream.error().message().c_str(),
