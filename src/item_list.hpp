@@ -18,6 +18,7 @@ Action_Item_BEG(items)
 Action_Item_DEF(name, ".{1,8}", "用户名错误", "name error")
 Action_Item_DEF(pass, ".{1,8}", "密码错误", "pass error")
 Action_Item_DEF(capt, ".{1,8}", "")
+Action_Item_DEF(nike_name,".{1,8}","","")
 Action_Item_END(items)
 
 #undef Action_Item_BEG
