@@ -15,12 +15,13 @@
 #define CHECK_INFORMATIONS_H
 #include <functional>
 #include "debug.hpp"
-
+#include "item_def.hpp"
 namespace marshal {
 
     static int lang = 0;
     template<int id, int Version>
     struct item_details;
+
 
     template <int commandId, int Version, int first, int...Args>
     struct action_details {
@@ -45,19 +46,18 @@ namespace marshal {
         static const char*const valid(const T* store) {
             const std::string& key = First::name();
             const std::string& value = store->get(key);
-            const char*const result = check(key, value);
+            const char* result = check(key, value);
             if (NULL == result) {
                 result = action_details<commandId, Version, Args...>::valid(store);
             }
             return result;
         }
 
-        template<class T>
-        static void for_each(const T* store, std::function<void(const std::string&, const std::string&) > it) {
+        static void for_each(std::function<void(const std::string&, const std::string&) > it) {
             const std::string& key = First::name();
-            const std::string& value = store->get(key);
+            const std::string& value = First::value();
             it(key, value);
-            action_details<commandId, Version, Args...>::for_each(store, it);
+            action_details<commandId, Version, Args...>::for_each(it);
         }
     };
 
@@ -84,10 +84,9 @@ namespace marshal {
             return check(key, value);
         }
 
-        template<class T>
-        static void for_each(const T* store, std::function<void(const std::string&, const std::string&) > it) {
+        static void for_each(std::function<void(const std::string&, const std::string&) > it) {
             const std::string& key = Last::name();
-            const std::string& value = store->get(key);
+            const std::string& value = Last::value();
             it(key, value);
         }
     };
@@ -108,9 +107,8 @@ namespace marshal {
             return NULL;
         }
 
-        template<class T>
-        static void for_each(const T* store, std::function<void(const std::string&, const std::string&) > it) {
-            hint_msg("not found special items for : id = %d in version = %d",commandId,Version);
+        static void for_each(std::function<void(const std::string&, const std::string&) > it) {
+            hint_msg("not found special items for : id = %d in version = %d", commandId, Version);
         }
     };
 }

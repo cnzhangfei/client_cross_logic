@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.9)
+project(cLion)
+
+set(CMAKE_CXX_STANDARD 11)
+ADD_DEFINITIONS(-DBOOST_ERROR_CODE_HEADER_ONLY)
+INCLUDE_DIRECTORIES(../../src)
+INCLUDE_DIRECTORIES(../../include)
+INCLUDE_DIRECTORIES(../../lib)
+INCLUDE_DIRECTORIES(../../test/cpp_test)
+add_executable(cLion main.cpp)

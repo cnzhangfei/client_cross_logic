@@ -1,4 +1,5 @@
 #include <iostream>
+#define BOOST_ERROR_CODE_HEADER_ONLY 1
 #include "test.h"
 
 int main(int argc, char** argv) {

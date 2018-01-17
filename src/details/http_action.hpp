@@ -20,6 +20,7 @@
 #include "http_request.hpp"
 #include "action.hpp"
 #include "debug.hpp"
+#include "url_mapping.hpp"
 
 namespace marshal {
 
@@ -35,8 +36,8 @@ namespace marshal {
             return "http_command";
         }
 
-        template <class T>
-        static void for_each(const T *store, std::function<void(const std::string &, const std::string &) > it) {
+       
+        static void for_each(std::function<void(const std::string &, const std::string &) > it) {
             it("开心就好", "开心就好");
         }
     };
@@ -46,37 +47,6 @@ namespace marshal {
      */
     template <class T, int Version>
     class action<T, Version, http_command> {
-    private:
-
-        std::string escape(const std::string &src) {
-            std::stringstream result;
-            std::for_each(src.begin(), src.end(), [&result](const char &c) {
-                switch (c) {
-                    case '"':
-                        result << "\\\"";
-                        break;
-                    case '\t':
-                        result << "\\t";
-                        break;
-                    case '\n':
-                        result << "\\n";
-                        break;
-                    case '\r':
-                        result << "\\r";
-                        break;
-                    case '\\':
-                        result << "\\\\";
-                        break;
-                    default:
-                    {
-                        result << c;
-                        break;
-                    }
-                }
-            });
-            return result.str();
-        }
-
     public:
         typedef action_imp<T, Version> imp_action;
         typedef data_store<imp_action, Version> imp_data_store;
@@ -90,21 +60,24 @@ namespace marshal {
             typedef information<Source, action_command, Version> action_information;
             typedef information<Source, http_command, Version> http_information;
 
+
             debug_msg("will be request %s = url(%s)",
                     action_information::name(),
-                    http_information::name()
-                    );
+                    http_information::name());
             imp_data_store *imp = (imp_data_store *)this;
+            http_information::template invoke(*imp);
+            /*
             std::stringstream ss;
             ss << "{";
-            action_information::for_each(
-                    imp,
-                    [this, &ss](const std::string &k, const std::string & v) {
-                        ss << "\"" << k << "\":\"" << this->escape(v) << "\",";
-                    });
+            http_request::for_each(
+                imp,
+                [this, &ss](const std::string &k, const std::string &v) {
+                    ss << "\"" << k << "\":\"" << this->escape(v) << "\",";
+                });
             ss << "\"id\":\"" << Source << "\"}";
 
-            http_information::template invoke(ss.str(), *imp);
+            http_entity<HTTP_HOST,Version>::invoke()
+            http_information::template invoke(ss.str(), *imp);*/
         }
     };
 }

@@ -110,8 +110,6 @@ namespace marshal {
             *(http_item *)this << stream;
             int size = 0;
             contents.resize(header_cast<content_length>(size) + 1,'\0');
-            //std::stringstream ss;
-           // stream.get()
             stream.read(contents.data(), size);
             debug_msg("wait response message for %s %s%s = %s",
                     method.c_str(),
@@ -124,6 +122,11 @@ namespace marshal {
 
         template <class T>
         http_response &operator>>(T &rsp) {
+            return *this;
+        }
+        
+        http_response& operator>>(std::string& rsp){
+            rsp.append(contents.begin(),contents.end());
             return *this;
         }
     };
@@ -157,6 +160,19 @@ namespace marshal {
             req_message >> stream;
             rsp_message << stream;
             rsp_message >> rsp;
+        }
+        
+        template<const std::string& method,const std::string& url>
+        static std::string invoke(const std::string& req){
+            http_iostream &stream = connect();
+            std::string resp;
+            debug_msg("will be request %s(%s)", method.c_str(), url.c_str());
+            http_request<host, method, url, Version> req_message(req);
+            http_response<host, method, url, Version> rsp_message;
+            req_message >> stream;
+            rsp_message << stream;
+            rsp_message >> resp;
+            return resp;
         }
     };
 }

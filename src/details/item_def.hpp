@@ -13,7 +13,7 @@
 
 #ifndef ITEM_DEF_H
 #define ITEM_DEF_H
-
+#include <boost/regex.hpp>
 
 namespace marshal {
 
@@ -47,7 +47,10 @@ namespace marshal {
             return k == #_name;\
         }\
         static bool value(const std::string& val) {\
-            return val == #_regex;\
+            return val == _regex;\
+        }\
+        static const char* value(){\
+            return _regex;\
         }\
         static const char*const es(int i){\
             static const char* const result[] = {\

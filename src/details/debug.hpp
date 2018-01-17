@@ -20,7 +20,7 @@ namespace marshal {
 #ifndef debug_msg
 #define debug_msg(fmt,...)  do{\
     char __buffer__[1024] = {0};\
-    snprintf(__buffer__,sizeof(__buffer__) -1 ,"[%s-%d-%s]:" fmt,\
+    snprintf(__buffer__,sizeof(__buffer__) -1 ,"debug[%s-%d-%s]:" fmt,\
     __FILE__,\
     __LINE__,\
     __FUNCTION__,\
@@ -31,6 +31,10 @@ namespace marshal {
 
 #ifndef error_msg
 #define error_msg debug_msg
+#endif
+
+#ifndef warn_msg
+#define warn_msg debug_msg
 #endif
 
 #ifndef hint_msg
