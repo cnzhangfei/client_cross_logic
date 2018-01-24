@@ -16,6 +16,8 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include "json.hpp"
+#include "debug.hpp"
 
 namespace marshal {
 
@@ -25,6 +27,39 @@ namespace marshal {
     private:
         std::string nop;
         std::map<std::string, std::string> store;
+    private:
+        using json = nlohmann::json;
+        json contents;
+    public:
+        template <class Information>
+        std::string aggregate()const{
+            json new_contents({});
+            Information::for_each([this,&new_contents](const std::string & k,const std::string& reg) {
+                json::const_iterator  it = this->contents.find(k);
+                if(it != this->contents.end()){
+                    new_contents[k] = *it;
+                }else{
+                    new_contents[k] = nullptr;
+                }
+            });
+            std::string result = new_contents.dump();
+            hint_msg("get the json = %s",result.c_str());
+            return result;
+        }
+
+        template <class Information>
+        void leach(const std::string& js){
+            try {
+                json new_contents = json::parse(js);
+                Information::for_each([this,&new_contents](const std::string & k,const std::string& reg) {
+                    this->contents[k] = new_contents[k];
+                });
+                hint_msg("new content = %s",contents.dump().c_str());
+            }catch (std::exception& e){
+                this->contents["message"] = e.what();
+                error_msg("response error = %s",js.c_str());
+            }
+        }
     public:
 
         void set(const std::string& k, const std::string& v) {

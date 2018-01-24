@@ -56,14 +56,12 @@ namespace marshal {
     template <const std::string &host, const std::string &method, const std::string &url, int Version>
     class http_request : public http_item {
     private:
-        boost::asio::const_buffer contents;
+        const std::string& contents;
 
     public:
 
-        template <class T>
-        http_request(const T &content) : contents(boost::asio::buffer(content)) {
+        http_request(const std::string& content) : contents(content) {
             headers["Host"] = host;
-            headers["Accept"] = "*/*";
             headers["Connection"] = "Keep-Alive";
             headers["Content-Type"] = "application/json; charset=utf-8";
         }
@@ -81,9 +79,7 @@ namespace marshal {
             std::for_each(headers.begin(), headers.end(), [&stream](http_headers::const_reference r) {
                 stream << r.first << ": " << r.second << "\r\n";
             });
-            stream << "Content-Length:" << strlen((const char*)contents.data()) << "\r\n";
-            stream << "\r\n";
-            stream << (const char*)contents.data();
+            stream << "Content-Length:" << contents.length() << "\r\n\r\n" << contents;
             return *this;
         }
     };
@@ -151,16 +147,6 @@ namespace marshal {
 
     public:
 
-        template <const std::string &method, const std::string &url, class T, class D>
-        static void invoke(const T &req, D &rsp) {
-            http_iostream &stream = connect();
-            debug_msg("will be request %s(%s)", method.c_str(), url.c_str());
-            http_request<host, method, url, Version> req_message(req);
-            http_response<host, method, url, Version> rsp_message;
-            req_message >> stream;
-            rsp_message << stream;
-            rsp_message >> rsp;
-        }
         
         template<const std::string& method,const std::string& url>
         static std::string invoke(const std::string& req){

@@ -65,7 +65,7 @@ namespace marshal {
                     action_information::name(),
                     http_information::name());
             imp_data_store *imp = (imp_data_store *)this;
-            http_information::template invoke(*imp);
+            http_information::template invoke(imp);
             /*
             std::stringstream ss;
             ss << "{";

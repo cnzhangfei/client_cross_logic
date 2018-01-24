@@ -41,7 +41,7 @@ namespace marshal {
         }
         
         template<class T>
-        static void invoke(T&){
+        static void invoke(T*){
             warn_msg("commandid = %d,command_type = %d,version = %d,special failed",commandId,commandType,Version);
         }
     };
@@ -58,12 +58,13 @@ struct information<_id,http_command,Version>{\
     enum {id = _id, type = http_command};\
     constexpr static const char* name() {return _name;}\
     template<class T>\
-    static void invoke(T& store) {\
+    static void invoke(T* store) {\
         typedef http_entity<HTTP_HOST, Version> entity;\
-        typedef request_mapping<_id,Version> mapping;\
-        std::string req = mapping::template aggregate(&store);\
-        std::string result = entity::template invoke<HTTP_POST, _id##__http_url>(req);\
-        mapping::template leach(result , &store);\
+        typedef typename url_mapping<_id, Version>::request http_request;\
+        typedef typename url_mapping<_id, Version>::response http_response;\
+        std::string value = store->template aggregate<http_request>();\
+        value = entity::template invoke<HTTP_POST, _id##__http_url>(value);\
+        store->template leach<http_response>(value);\
     }\
 };
 
