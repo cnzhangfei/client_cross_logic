@@ -1,10 +1,5 @@
 package logic;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.Random;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -12,7 +7,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.marshal.java.servlet.JsonListener;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class User extends UserInformation implements Entity {
 
@@ -158,12 +160,12 @@ public class User extends UserInformation implements Entity {
      * @return
      */
     @Override
-    public User instance(String id) {
+    public Entity instance(String id) {
         try {
-            User inst;
-            inst = (User) this.getClass().newInstance();
+            User inst = this.getClass().newInstance();
             return inst.construct(id);
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(JsonListener.class.getName()).log(Level.SEVERE, null, ex);
         }
         return this;
     }
@@ -186,13 +188,16 @@ public class User extends UserInformation implements Entity {
                 | InvocationTargetException
                 | NoSuchMethodException
                 | IllegalArgumentException
-                | SecurityException e) {
-            e.printStackTrace();
+                | SecurityException ex) {
+            Logger.getLogger(JsonListener.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "{status:\"00\"}";
     }
 
     public InitResponse Init(InitRequest req) {
+        if (null == req) {
+            return null;
+        }
         InitResponse rsp = new InitResponse();
         System.out.println("this is process by User " + req.getOsName());
         rsp.setVirtualId("aaaaaaa");

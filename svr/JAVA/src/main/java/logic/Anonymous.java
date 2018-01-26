@@ -8,6 +8,9 @@ public class Anonymous extends User {
 
     @Override
     public InitResponse Init(InitRequest req) {
+        if (null == req) {
+            return null;
+        }
         InitResponse rsp = super.Init(req);
         System.out.println("this processed by Anonymous " + req.getOsName());
         rsp.setVirtualId("bbbb");
