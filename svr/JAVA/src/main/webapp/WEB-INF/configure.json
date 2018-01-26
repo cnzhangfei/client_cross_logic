@@ -1,0 +1,13 @@
+{
+    "Entity": [
+        {
+            "className": "logic.Anonymous",
+            "id": "entity",
+            "paraments": [
+            ]
+        }
+    ],
+    "Anonymous": [
+    ]
+}
+

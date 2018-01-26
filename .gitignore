@@ -3,3 +3,4 @@
 /lib/*
 /svr/NODEJS/.vscode
 /svr/NODEJS/node_modules
+/svr/JAVA/target/
